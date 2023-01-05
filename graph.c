@@ -444,7 +444,7 @@ int TSP_cmd(pnode head,int input[],int size)
     {
         best_route = -1;
     }
-    printf("TSP shortest path: %d\n",best_route);
+    printf("TSP shortest path: %d \n",best_route);
     
     return 0;
 }

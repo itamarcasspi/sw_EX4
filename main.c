@@ -62,7 +62,7 @@ int main()
         {
             scanf(" %d", &src);
             scanf(" %d", &dst);
-            printf("Dijsktra shortest path: %d\n", shortsPath_cmd(hd, src, dst));
+            printf("Dijsktra shortest path: %d \n", shortsPath_cmd(hd, src, dst));
             
             if(scanf(" %c", &menu) == EOF )
             {
