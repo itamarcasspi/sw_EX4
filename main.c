@@ -8,6 +8,8 @@ int main()
     int src = 0;
     int dst, weight;
 
+    
+
     scanf(" %c", &menu);
     while (menu != 'E')
     {
@@ -61,7 +63,11 @@ int main()
             scanf(" %d", &src);
             scanf(" %d", &dst);
             printf("Dijsktra shortest path: %d\n", shortsPath_cmd(hd, src, dst));
-            scanf(" %c", &menu);
+            
+            if(scanf(" %c", &menu) == EOF )
+            {
+                break;
+            }
         }
         else if (menu == 'T')
         {   
@@ -113,8 +119,12 @@ int main()
             //     }
             // }
             int num_of_cities = 0;
-            scanf("%d",&num_of_cities);
-            int *cities_to_visit = malloc(num_of_cities);
+            if(scanf("%d",&num_of_cities)<1)
+            {
+                break;
+            } 
+            
+            int *cities_to_visit = malloc(sizeof(int)*num_of_cities);
             for (int i = 0; i < num_of_cities; i++)
             {
                 int city;
@@ -127,7 +137,10 @@ int main()
             
             TSP_cmd(hd,cities_to_visit,num_of_cities);
             free(cities_to_visit);
-            scanf(" %c",&menu);
+            if(scanf(" %c",&menu)==EOF)
+            {
+                break;
+            }
         }
         else if (menu == 'Z')
         {

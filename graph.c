@@ -17,6 +17,20 @@ int count_nodes(pnode head)
     return counter;
 }
 
+int highest_node(pnode head)
+{
+    int highest = 0;
+    while (head != NULL)
+    {
+        if(head->node_num > highest)
+        {
+            highest = head->node_num;
+        }
+        head = head->next;
+    }
+    return highest;
+}
+
 pnode find_node(pnode head, int id)
 {   
     while (head != NULL)
@@ -312,98 +326,6 @@ int shortsPath_cmd(pnode head, int node_a, int node_b)
     return dist[node_a][node_b];
 }
 
-// void swap (char *x, char *y)
-
-// {
-//     char temp;
-//     temp = *x;
-//     *x = *y;
-//     *y = temp;
-// }
-
-// void permute(char *a, int i, int n, int *permutation_matrix, int size)
-// {
-//     int j;
-//     if (i == n)
-//     {
-//         // while (permutation_matrix!=0)
-//         // {
-//         //     permutation_matrix+=size;
-//         // }
-//         printf("%s\n",a);
-//     }
-//     else {
-//         for (j = i; j <= n; j++)
-//         {
-//             swap((a + i), (a + j));
-//             permute(a, i + 1, n,permutation_matrix,size);
-//             swap((a + i), (a + j)); 
-//         }
-//     }
-// }
-// int factorial(int in)
-// {
-//     if(in==1)
-//     {
-//         return 1;
-//     }
-//     return in*factorial(in-1);
-// }
-
-// int TSP_cmd(pnode head,char *input)
-// {
-//     int num_of_nodes = biggest_node(head) + 1;
-//     int dist[num_of_nodes][num_of_nodes];
-//     for (int i = 0; i < num_of_nodes; i++)
-//     {
-//         for (int j = 0; j < num_of_nodes; j++)
-//         {
-//             dist[i][j] = INF;
-//         }
-//         dist[i][i] = 0;
-//     }
-//     pnode current_node = head;
-//     while (current_node != NULL)
-//     {
-//         pedge current_edge = current_node->edges;
-//         while (current_edge != NULL)
-//         {
-//             dist[current_node->node_num][current_edge->endpoint->node_num] = current_edge->weight;
-//             current_edge = current_edge->next;
-//         }
-//         current_node = current_node->next;
-//     }
-
-//     for (int k = 0; k < num_of_nodes; k++)
-//     {
-//         for (int i = 0; i < num_of_nodes; i++)
-//         {
-//             for (int j = 0; j < num_of_nodes; j++)
-//             {
-//                 if (dist[i][j] > dist[i][k] + dist[k][j])
-//                 {
-//                     dist[i][j] = dist[i][k] + dist[k][j];
-//                 }
-//             }
-//         }
-//     }
-//     int str_size = strlen(input);
-//     int num_of_permutations = factorial(str_size);
-//     char permutation_matrix[num_of_permutations][str_size];
-//     memset(permutation_matrix,0,num_of_permutations*str_size);
-//     permute(input,0,str_size-1,permutation_matrix,str_size);
-//     // for (int i = 0; i < num_of_permutations; i+=str_size)
-//     // {
-//     //     for (int j = 0; j < str_size; j++)
-//     //     {
-//     //         printf("%d",**(permutation_matrix+j));
-//     //     }
-//     //     printf("\n");
-
-//     // }
-    
-    
-// }
 
 void swap (int *x, int *y)
 
@@ -414,26 +336,32 @@ void swap (int *x, int *y)
     *y = temp;
 }
 
-void permute(int *a, int i, int n, int *permutation_matrix, int size)
+void permute(int *a, int i, int n, int *permutation_matrix, int size,int num_of_permutations)
 {
     int j;
     if (i == n)
     {
-        while (*permutation_matrix!=-1)
+        // while (*permutation_matrix!=-1  )
+        // {
+        //     permutation_matrix+=size;
+        // }
+        for (int i = 0; i < num_of_permutations && *permutation_matrix != -1; i++)
         {
             permutation_matrix+=size;
+            
         }
+        
         for (int i = 0; i < size; i++)
         {
-            *permutation_matrix = *(a+i);
-            permutation_matrix++;
+            *(permutation_matrix+i) = *(a+i);
+            // permutation_matrix++;
         }        
     }
     else {
-        for (j = i; j <= n; j++)
+        for (j = i; j <= n && j<size && i<size; j++)
         {
             swap((a + i), (a + j));
-            permute(a, i + 1, n,permutation_matrix,size);
+            permute(a, i + 1, n,permutation_matrix,size,num_of_permutations);
             swap((a + i), (a + j)); 
         }
     }
@@ -449,7 +377,7 @@ int factorial(int in)
 
 int TSP_cmd(pnode head,int input[],int size)
 {
-    int num_of_nodes = biggest_node(head) + 1;
+    int num_of_nodes = highest_node(head) + 1;
     int dist[num_of_nodes][num_of_nodes];
     for (int i = 0; i < num_of_nodes; i++)
     {
@@ -495,7 +423,7 @@ int TSP_cmd(pnode head,int input[],int size)
             permutation_matrix[i][j] = -1;
         }
     }
-    permute(input,0,str_size-1,permutation_matrix,str_size);
+    permute(input,0,str_size-1,permutation_matrix,str_size,num_of_permutations);
     int best_route = INF;
     for (int i = 0; i < num_of_permutations; i++)
     {
@@ -512,6 +440,11 @@ int TSP_cmd(pnode head,int input[],int size)
             best_route = current_route_cost;
         }
     }
+    if(best_route>=INF)
+    {
+        best_route = -1;
+    }
     printf("TSP shortest path: %d\n",best_route);
+    
     return 0;
 }
