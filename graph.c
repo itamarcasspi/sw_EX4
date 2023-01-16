@@ -22,7 +22,7 @@ int highest_node(pnode head)
     int highest = 0;
     while (head != NULL)
     {
-        if(head->node_num > highest)
+        if (head->node_num > highest)
         {
             highest = head->node_num;
         }
@@ -32,7 +32,7 @@ int highest_node(pnode head)
 }
 
 pnode find_node(pnode head, int id)
-{   
+{
     while (head != NULL)
     {
         if (head->node_num == id)
@@ -45,19 +45,19 @@ pnode find_node(pnode head, int id)
     return NULL;
 }
 
-void delete_related_edge(pnode *head,int dest)
+void delete_related_edge(pnode *head, int dest)
 {
     pnode n = *head;
     while (n != NULL)
     {
         pedge e = n->edges;
         pedge p = e;
-        while(e != NULL)
+        while (e != NULL)
         {
-            if(e->endpoint->node_num == dest)
+            if (e->endpoint->node_num == dest)
             {
                 p->next = e->next;
-                delete_edge(head,n->node_num,dest);
+                delete_edge(head, n->node_num, dest);
                 e = p;
             }
             else
@@ -86,7 +86,7 @@ int biggest_node(pnode head)
 
 void create_node(pnode *head, int id)
 {
-    //if node exists, do nothing
+    // if node exists, do nothing
     if (find_node(*head, id) != NULL)
     {
         return;
@@ -114,7 +114,7 @@ void create_node(pnode *head, int id)
 
 void add_edge(pnode *head, int src, int dst, int weight)
 {
-    //create new edge
+    // create new edge
     pnode source = find_node(*head, src);
     if (source == NULL)
     {
@@ -126,7 +126,7 @@ void add_edge(pnode *head, int src, int dst, int weight)
     new_edge->next = NULL;
 
     pnode destination = find_node(*head, dst);
-    //if no destination node found, create one
+    // if no destination node found, create one
     if (destination == NULL)
     {
         create_node(head, dst);
@@ -134,7 +134,7 @@ void add_edge(pnode *head, int src, int dst, int weight)
     }
     new_edge->endpoint = destination;
 
-    //if the source node has no existing edge, just point to the new edge
+    // if the source node has no existing edge, just point to the new edge
     if (source->edges == NULL)
     {
         source->edges = new_edge;
@@ -142,10 +142,10 @@ void add_edge(pnode *head, int src, int dst, int weight)
     }
 
     pedge curr_edge = source->edges;
-    //find the last edge in the list
+    // find the last edge in the list
     while (curr_edge->next != NULL)
     {
-        //if we found an existing edge with the same dest just change the weight and free the new edge
+        // if we found an existing edge with the same dest just change the weight and free the new edge
         if (curr_edge->endpoint->node_num == dst)
         {
             curr_edge->weight = weight;
@@ -154,7 +154,7 @@ void add_edge(pnode *head, int src, int dst, int weight)
         }
         curr_edge = curr_edge->next;
     }
-    //if the last edge in the list has the same dst, just change the weight and free the new edge we created
+    // if the last edge in the list has the same dst, just change the weight and free the new edge we created
     if (curr_edge->endpoint->node_num == dst)
     {
         curr_edge->weight = weight;
@@ -175,7 +175,7 @@ int delete_edge(pnode *head, int src, int dest)
     pedge prev, current;
     current = source->edges;
     prev = current;
-    //if the first edge of the node is the desired one
+    // if the first edge of the node is the desired one
     if (source->edges->endpoint->node_num == dest)
     {
         pedge temp = source->edges;
@@ -205,11 +205,43 @@ int delete_edge(pnode *head, int src, int dest)
     return 0;
 }
 
+void delete_leading_edge(pnode *head, int id)
+{
+    pnode current = *head;
+    while (current != NULL)
+    {
+        pedge previous_edge = NULL;
+        pedge current_edge = current->edges;
+        while (current_edge != NULL)
+        {
+            if (current_edge->endpoint->node_num == id)
+            {
+
+                if (previous_edge == NULL)
+                {
+                    current->edges = current_edge->next;
+                }
+                else
+                {
+                    previous_edge->next = current_edge->next;
+                }
+                free(current_edge);
+                break;
+            }
+            previous_edge = current_edge;
+            current_edge = current_edge->next;
+        }
+        current = current->next;
+    }
+}
+
 void delete_node(pnode *head, int id)
 {
     pnode prev;
     pnode current = *head;
     // delete_related_edge(head,id);
+    delete_leading_edge(head,id);
+    
     if (current->node_num == id)
     {
         if ((*head)->edges != NULL)
@@ -326,8 +358,7 @@ int shortsPath_cmd(pnode head, int node_a, int node_b)
     return dist[node_a][node_b];
 }
 
-
-void swap (int *x, int *y)
+void swap(int *x, int *y)
 
 {
     int temp;
@@ -336,7 +367,7 @@ void swap (int *x, int *y)
     *y = temp;
 }
 
-void permute(int *a, int i, int n, int *permutation_matrix, int size,int num_of_permutations)
+void permute(int *a, int i, int n, int *permutation_matrix, int size, int num_of_permutations)
 {
     int j;
     if (i == n)
@@ -347,35 +378,35 @@ void permute(int *a, int i, int n, int *permutation_matrix, int size,int num_of_
         // }
         for (int i = 0; i < num_of_permutations && *permutation_matrix != -1; i++)
         {
-            permutation_matrix+=size;
-            
+            permutation_matrix += size;
         }
-        
+
         for (int i = 0; i < size; i++)
         {
-            *(permutation_matrix+i) = *(a+i);
+            *(permutation_matrix + i) = *(a + i);
             // permutation_matrix++;
-        }        
+        }
     }
-    else {
-        for (j = i; j <= n && j<size && i<size; j++)
+    else
+    {
+        for (j = i; j <= n && j < size && i < size; j++)
         {
             swap((a + i), (a + j));
-            permute(a, i + 1, n,permutation_matrix,size,num_of_permutations);
-            swap((a + i), (a + j)); 
+            permute(a, i + 1, n, permutation_matrix, size, num_of_permutations);
+            swap((a + i), (a + j));
         }
     }
 }
 int factorial(int in)
 {
-    if(in==1)
+    if (in == 1)
     {
         return 1;
     }
-    return in*factorial(in-1);
+    return in * factorial(in - 1);
 }
 
-int TSP_cmd(pnode head,int input[],int size)
+int TSP_cmd(pnode head, int input[], int size)
 {
     int num_of_nodes = highest_node(head) + 1;
     int dist[num_of_nodes][num_of_nodes];
@@ -393,7 +424,12 @@ int TSP_cmd(pnode head,int input[],int size)
         pedge current_edge = current_node->edges;
         while (current_edge != NULL)
         {
-            dist[current_node->node_num][current_edge->endpoint->node_num] = current_edge->weight;
+            int curr_weight = current_edge->weight;
+            int edge_begin = current_node->node_num;
+
+            int edge_end = current_edge->endpoint->node_num;
+
+            dist[edge_begin][edge_end] = curr_weight;
             current_edge = current_edge->next;
         }
         current_node = current_node->next;
@@ -414,8 +450,8 @@ int TSP_cmd(pnode head,int input[],int size)
     }
     int str_size = size;
     int num_of_permutations = factorial(str_size);
-    int permutation_matrix[num_of_permutations][str_size];    
-    
+    int permutation_matrix[num_of_permutations][str_size];
+
     for (int i = 0; i < num_of_permutations; i++)
     {
         for (int j = 0; j < str_size; j++)
@@ -423,28 +459,28 @@ int TSP_cmd(pnode head,int input[],int size)
             permutation_matrix[i][j] = -1;
         }
     }
-    permute(input,0,str_size-1,permutation_matrix,str_size,num_of_permutations);
+    permute(input, 0, str_size - 1, permutation_matrix, str_size, num_of_permutations);
     int best_route = INF;
     for (int i = 0; i < num_of_permutations; i++)
     {
         int current_route_cost = 0;
-        for (int j = 0; j < size-1; j++)
+        for (int j = 0; j < size - 1; j++)
         {
-            if(dist[permutation_matrix[i][j]][permutation_matrix[i][j+1]] >0)
+            if (dist[permutation_matrix[i][j]][permutation_matrix[i][j + 1]] > 0)
             {
-                current_route_cost += dist[permutation_matrix[i][j]][permutation_matrix[i][j+1]];
+                current_route_cost += dist[permutation_matrix[i][j]][permutation_matrix[i][j + 1]];
             }
         }
-        if(current_route_cost<best_route && current_route_cost != 0)
+        if (current_route_cost < best_route && current_route_cost != 0)
         {
             best_route = current_route_cost;
         }
     }
-    if(best_route>=INF)
+    if (best_route >= INF)
     {
         best_route = -1;
     }
-    printf("TSP shortest path: %d \n",best_route);
-    
+    printf("TSP shortest path: %d \n", best_route);
+
     return 0;
 }

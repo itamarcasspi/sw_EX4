@@ -27,7 +27,10 @@ void add_edge(pnode *head,int src, int dst,int weight);
 
 int delete_edge(pnode *head,int src, int dest);
 
-void delete_node(pnode *head,int id);
+void delete_node(pnode *head,int node_num);
+
+// void delete_leading_edge(pnode *head, int id);
+
 
 void create_node(pnode *head,int id);
 

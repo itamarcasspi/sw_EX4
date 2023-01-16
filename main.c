@@ -56,7 +56,12 @@ int main()
         {
             scanf(" %d", &src);
             delete_node(&hd, src);
-            scanf(" %c", &menu);
+            // delete_leading_edge(&hd, src);
+
+            if (scanf(" %c", &menu) == EOF)
+            {
+                break;
+            }
         }
         else if (menu == 'S')
         {
@@ -71,58 +76,15 @@ int main()
         }
         else if (menu == 'T')
         {   
-            // int arr[ARRAY_SIZE];
-            // for (int i = 0; i < ARRAY_SIZE; i++)
-            // {
-            //     arr[i] = -1;
-            // }
-            // int *temp = arr;
-            // int counter = 0;
-            // while (counter < ARRAY_SIZE && menu == 'T') //each iteration adds a new edge;
-            // {
-            //     int scanned = scanf(" %d", &dst);
-            //     if (scanned == 0) //meaning we get a new menu charcter, then stop adding edges;
-            //     {
-            //         scanf(" %c", &menu); //we will exit the outer loop
-            //         break;
-            //     }
-            //     if (scanned ==1 )
-            //     {
-            //         arr[counter] = dst;
-            //         temp++;
-            //         counter++;
-            //     }
-                
-            // }
-            // int temp_arr[ARRAY_SIZE];
-            // for (int i = 0; i < ARRAY_SIZE; i++)
-            // {
-            //     temp_arr[i] = -1;
-            // }
-
-            // for (int i = 0; i < ARRAY_SIZE; i++)
-            // {
-            //     for (int j = 0; j < ARRAY_SIZE; j++)
-            //     {
-            //         if(arr[i] == arr[j] && i!=j && arr[i]!= -1 && arr[j] != -1)
-            //         {
-            //             arr[i] = -1;
-            //             counter--;
-            //         }
-            //     }
-            // }
-            // for (int i = 0,j = 0; i < ARRAY_SIZE; i++)
-            // {
-            //     if(arr[i]!=-1)
-            //     {
-            //         temp[j++] = arr[i];
-            //     }
-            // }
             int num_of_cities = 0;
             if(scanf("%d",&num_of_cities)<1)
             {
                 break;
             } 
+            if(num_of_cities == 0)
+            {
+                break;
+            }
             
             int *cities_to_visit = malloc(sizeof(int)*num_of_cities);
             for (int i = 0; i < num_of_cities; i++)
@@ -134,8 +96,8 @@ int main()
                 }
             }
             
-            
-            TSP_cmd(hd,cities_to_visit,num_of_cities);
+            int *tsp_input = cities_to_visit;
+            TSP_cmd(hd,tsp_input,num_of_cities);
             free(cities_to_visit);
             if(scanf(" %c",&menu)==EOF)
             {
@@ -145,8 +107,11 @@ int main()
         else if (menu == 'Z')
         {
             printGraph_cmd(hd);
-            scanf(" %c",&menu);
-            break;
+            if(scanf(" %c",&menu) == EOF)
+            {
+                break;
+            }
+            
         }
     }
     
